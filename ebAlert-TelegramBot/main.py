@@ -4,7 +4,7 @@ from telegram       import Update
 from telegram.ext   import ApplicationBuilder, ContextTypes, CommandHandler
 
 token = os.environ.get("TOKEN") or "Your_secret_key"
-allowed_chat = TOKEN = os.environ.get("CHAT_ID") or "Your_chat_id"
+allowed_chat = os.environ.get("CHAT_ID") or "Your_chat_id"
 
 help_message = "## ebay-Kleinanzeigen-Alert Bot ##\n" \
                "/list - prints all URLs currently watched\n" \
@@ -12,7 +12,7 @@ help_message = "## ebay-Kleinanzeigen-Alert Bot ##\n" \
                "/remove <ID> - removes URL by ID, doesn't watch anymore"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat.id != allowed_chat:
+    if str(update.effective_chat.id) != allowed_chat:
         return
 
     await show_help(update, context)
@@ -22,7 +22,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat.id != allowed_chat:
+    if str(update.effective_chat.id) != allowed_chat:
         return
 
     await context.bot.send_message(
@@ -31,7 +31,7 @@ async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def list_links(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat.id != allowed_chat:
+    if str(update.effective_chat.id) != allowed_chat:
         return
 
     command = "ebAlert links --show"
@@ -43,7 +43,7 @@ async def list_links(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat.id != allowed_chat:
+    if str(update.effective_chat.id) != allowed_chat:
         return
 
     if len(context.args) == 0:
@@ -71,7 +71,7 @@ async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def remove(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_chat.id != allowed_chat:
+    if str(update.effective_chat.id) != allowed_chat:
         return
 
     if len(context.args) == 0:
@@ -81,8 +81,8 @@ async def remove(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    id = str(context.args[0])
-    command = "ebAlert links --remove_link " + id
+    link_id = str(context.args[0])
+    command = "ebAlert links --remove_link " + link_id
     process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     await context.bot.send_message(
