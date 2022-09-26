@@ -5,6 +5,7 @@ from telegram.ext   import ApplicationBuilder, ContextTypes, CommandHandler
 
 token = os.environ.get("TOKEN") or "Your_secret_key"
 allowed_chat = os.environ.get("CHAT_ID") or "Your_chat_id"
+ebAlert_path = os.environ.get("EBALERT_PATH") or "ebAlert"
 
 help_message = "## ebay-Kleinanzeigen-Alert Bot ##\n" \
                "/list - prints all URLs currently watched\n" \
@@ -44,7 +45,7 @@ async def list_links(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if str(update.effective_chat.id) != allowed_chat:
         return
 
-    command = "ebAlert links --show"
+    command = ebAlert_path + " links --show"
     process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     await context.bot.send_message(
@@ -71,7 +72,7 @@ async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    command = "ebAlert links --add_url '" + url + "'"
+    command = ebAlert_path + " links --add_url '" + url + "'"
     process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     await context.bot.send_message(
@@ -92,7 +93,7 @@ async def remove(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     link_id = str(context.args[0])
-    command = "ebAlert links --remove_link " + link_id
+    command = ebAlert_path + " links --remove_link " + link_id
     process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     await context.bot.send_message(
