@@ -11,8 +11,14 @@ help_message = "## ebay-Kleinanzeigen-Alert Bot ##\n" \
                "/add <URL> - adds passed URL and watches it in the future\n" \
                "/remove <ID> - removes URL by ID, doesn't watch anymore"
 
+illegal_chat_message = "Not allowed to communicate with you! Please add your chat ID to the whitelist."
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if str(update.effective_chat.id) != allowed_chat:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=illegal_chat_message
+        )
         return
 
     await show_help(update, context)
@@ -23,6 +29,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def show_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if str(update.effective_chat.id) != allowed_chat:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=illegal_chat_message
+        )
         return
 
     await context.bot.send_message(
