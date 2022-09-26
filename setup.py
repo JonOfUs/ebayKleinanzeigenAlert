@@ -9,6 +9,7 @@ setup(
         'requests>=2.23',
         'bs4>=0.0.1',
         'sqlalchemy>=1.4'
+        'python-telegram-bot>=20.0a4'
     ],
     entry_points={'console_scripts': 'ebAlert=ebAlert.main:cli'}
 )
