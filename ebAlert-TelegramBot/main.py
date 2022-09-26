@@ -1,7 +1,7 @@
 import os
 import subprocess
-from telegram       import Update, InlineQueryResultArticle, InputTextMessageContent
-from telegram.ext   import ApplicationBuilder, ContextTypes, CommandHandler, InlineQueryHandler
+from telegram       import Update
+from telegram.ext   import ApplicationBuilder, ContextTypes, CommandHandler
 
 token = os.environ.get("TOKEN") or "Your_secret_key"
 allowed_chat = TOKEN = os.environ.get("CHAT_ID") or "Your_chat_id"
