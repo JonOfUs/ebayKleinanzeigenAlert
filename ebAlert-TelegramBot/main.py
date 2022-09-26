@@ -72,7 +72,7 @@ async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    command = ebAlert_path + " links --add_url '" + url + "'"
+    command = ebAlert_path + " links --add_url " + url
     process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     await context.bot.send_message(
