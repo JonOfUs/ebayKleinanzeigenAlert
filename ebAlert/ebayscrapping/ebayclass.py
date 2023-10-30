@@ -1,11 +1,12 @@
-import bs4
+import re
+from typing import Generator
+
 import requests
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-from ebAlert.core.config import settings
+
 from ebAlert import create_logger
-from typing import Generator
-from sqlalchemy.orm import Session
+from ebAlert.core.config import settings
 
 log = create_logger(__name__)
 
@@ -31,7 +32,7 @@ class EbayItem:
 
     @property
     def price(self) -> str:
-        return self._find_text_in_class("aditem-main--middle--price") or "No Price"
+        return self._find_text_in_class("aditem-main--middle--price-shipping--price") or "No Price"
 
     @property
     def description(self) -> str:
@@ -76,17 +77,22 @@ class EbayItem:
 class EbayItemFactory:
     def __init__(self, link):
         self.link = link
-        articles = self.extract_item_from_page(self.get_webpage())
-        self.item_list = [EbayItem(article) for article in articles]
+        web_pages = self.get_webpage()
+        if web_pages:
+            articles = self.extract_item_from_page(self.get_webpage())
+            self.item_list = [EbayItem(article) for article in articles]
+        else:
+            self.item_list = []
 
     def get_webpage(self) -> str:
         custom_header = {
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0"
         }
         response = requests.get(self.link, headers=custom_header)
-
-        if response.status_code == 200:
+        if response and response.status_code == 200:
             return response.text
+        else:
+            print(f"<< webpage fetching error for url: {self.link}")
 
     @staticmethod
     def extract_item_from_page(text: str) -> Generator:
@@ -94,6 +100,6 @@ class EbayItemFactory:
         soup = BeautifulSoup(cleaned_response, "html.parser")
         result = soup.find(attrs={"id": "srchrslt-adtable"})
         if result:
-            for item in result.find_all(attrs={"class": "ad-listitem lazyload-item"}):
+            for item in result.find_all(attrs={"class": re.compile("ad-listitem.*")}):
                 if item.article:
                     yield item.article
