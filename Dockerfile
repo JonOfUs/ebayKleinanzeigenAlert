@@ -1,7 +1,7 @@
 FROM python:3.12
 
-ADD ./ebAlert /app/ebAlert
-ADD ./ebAlert-TelegramBot /app/ebAlert-TelegramBot
+ADD ./ebAlert/ /app/ebAlert/
+ADD ./ebAlert-TelegramBot/ /app/ebAlert-TelegramBot/
 ADD ./setup.py /app/
 
 WORKDIR /app
