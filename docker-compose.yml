@@ -7,6 +7,6 @@ services:
     image: ebalert
     restart: unless-stopped
     env_file:
-      - .env
+      - .env.example
     volumes:
       - .data:/root

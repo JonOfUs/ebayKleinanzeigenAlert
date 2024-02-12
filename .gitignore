@@ -4,3 +4,4 @@ ebayAlert*
 notebook
 venv
 build/*
+.env
