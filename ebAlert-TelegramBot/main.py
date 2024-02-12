@@ -65,10 +65,10 @@ async def add(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     url = str(context.args[0])
-    if "ebay-kleinanzeigen.de" not in url.lower():
+    if "kleinanzeigen.de" not in url.lower():
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Please provide a valid ebay-Kleinanzeigen URL"
+            text="Please provide a valid Kleinanzeigen URL"
         )
         return
 

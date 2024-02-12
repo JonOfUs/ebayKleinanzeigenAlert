@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  ebAlert:
+    build: .
+    container_name: ebAlert
+    image: ebalert
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - .data:/root
