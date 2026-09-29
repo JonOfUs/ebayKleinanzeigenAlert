@@ -5,3 +5,4 @@ notebook
 venv
 build/*
 .env
+**/__pycache__/**

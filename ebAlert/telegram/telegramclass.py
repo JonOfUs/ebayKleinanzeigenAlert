@@ -18,8 +18,10 @@ class SendingClass:
         sending_url = settings.TELEGRAM_API_URL + message_encoded + ""
         response = requests.get(sending_url)
 
-        if response == 200:
-            return response.json()["ok"]
+        if response.status_code != 200:
+            print(f"<< telegram sending error {response.status_code}: {response.text}")
+            return False
+        return response.json()["ok"]
 
     def send_formated_message(self, item: EbayItem):
         message = f"{item.title}\n\n{item.price} ({item.city})\n\n"
