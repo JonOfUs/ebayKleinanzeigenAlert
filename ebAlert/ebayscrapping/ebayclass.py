@@ -89,6 +89,8 @@ class EbayItemFactory:
         }
         response = requests.get(self.link, headers=custom_header)
         if response and response.status_code == 200:
+            # the server sends no charset, requests would fall back to ISO-8859-1
+            response.encoding = "utf-8"
             return response.text
         else:
             print(f"<< webpage fetching error for url: {self.link}")
